@@ -282,3 +282,11 @@ command /fly:
 		else:
 			set player's flight mode to true
 			send "&5Zypst >> &7Flight mode has been Enabled!"
+
+# block's plugins :) #
+command /plugins:
+	aliases: /version, /pl, /bukkit:?, /bukkit:me, /me , /whois, /bukkit:pl, /bukkit:plugins, /ver, /about, /?, /versions, /icanhasbukkit, /bukkit:ver, /bukkit:versions, /bukkit:about
+	permission: zypst.plugins.view
+	permission message: &cYou don't have enough permission for this command!
+	trigger:
+		Send "&c&lNo."
