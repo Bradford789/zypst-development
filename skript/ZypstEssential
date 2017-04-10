@@ -1,0 +1,284 @@
+#-------------------------------------#
+#                                     #
+#          Zypst Essentials           #
+#          Developed By The           #
+#          Development team!          #
+#          Version: 1.0               #
+#-------------------------------------#
+
+# ""(No Knowen area's/Bug Atm Please Let Bradford789 know if there is one :0 )"" #
+
+# on skript load it show's ""([zypstessentials] Script initiated...)"" and sends it to console #
+on script load:
+	execute console command "/gamerule sendCommandFeedback false"
+	send message "&8[&5&lzypst&e&lessentials&8] &7Script initiated..." to console
+
+
+
+# The enchant command ""(Just Like Essentials)"" #
+command /enchant [<enchantment type>]:
+	aliases: /enchantment
+	permission: zypst.enchant
+	permission message: &cYou don't have enough permission for this command!
+	trigger:
+		if arg 1 is not set:
+			message "&5Zypst >> &7Please specify an enchantment to apply."
+		if player's tool is air:
+			message "&5Zypst >> &7You cannot enchant air."
+		else:
+			enchant player's tool with arg 1
+			send "&5Zypst >> &7Your item has been enchanted with %arg 1%."
+
+# the essentials clear command! #
+command /clear [<player>]:
+	aliases: /ci, /clean, /clearinventory
+	permission: zypst.clearinventory
+	permission message: &cYou don't have enough permission for this command!
+	trigger:
+		if arg 1 is not set:
+			send "&5Zypst >> &7Your inventory has been cleared."
+			clear the player's inventory
+			stop
+		if arg 1 is set:
+			if player has permission "Zypst.clearinventory.others":
+				send "&5Zypst >> &7%arg 1%'s inventory has been cleared."
+				clear the inventory of arg 1
+
+
+# Changes The Game Mode To Creative!!! #
+command /gamemode [<text>] [<player>]:
+	aliases: /gm
+	permission: zypst.gamemode
+	permission message: &cYou don't have enough permission for this command!
+	trigger:
+		if arg 1 is not set:
+			send "&5Zypst >> &7You must specify a gamemode."
+			stop
+		if arg 1 is set:
+			if arg 2 is not set:
+				if arg 1 is "creative" or "c" or "1":
+					set player's gamemode to creative
+					send "&5Zypst >> &7Your gamemode has been set to creative."
+				if arg 1 is "survival" or "s" or "0":
+					set the player's gamemode to survival
+					send "&5Zypst >> &7Your gamemode has been set to survival."
+				if arg 1 is "adventure" or "a" or "2":
+					set player's gamemode to adventure
+					send "&5Zypst >> &7Your gamemode has been set to adventure."
+			if arg 2 is set:
+				if player has permission "zypst.gamemode.others":
+					if arg 1 is "creative" or "c" or "1":
+						set arg 2's gamemode to creative
+						send "&5Zypst >> &7%arg 2%'s gamemode has been set to creative."
+					if arg 1 is "survival" or "s" or "0":
+						set arg 2's gamemode to survival
+						send "&5Zypst >> &7%arg 2%'s gamemode has been set to survival."
+					if arg 1 is "adventure" or "a" or "2":
+						set arg 2's gamemode to adventure
+						send "&5Zypst >> &7%arg 2%'s gamemode has been set to adventure."
+
+# Heals Player's and or Heals Your self #
+command /heal [<player>]:
+	permission: zypst.heal
+	permission message: &cYou don't have enough permission for this command!
+	trigger:
+		if arg 1 is not set:
+			heal the player by 10 hearts
+			send "&5Zypst >> &7You have been healed."
+			execute console command "/feed %player%"
+		if arg 1 is set:
+			if player has permission "zypst.heal.others":
+				heal arg 1 by 10 hearts
+				send "&5Zypst >> &7You have been healed." to arg 1
+				send "&5Zypst >> &7%arg 1% has been healed."
+				execute console command "/feed %arg 1%"
+
+
+
+# Unban Ban's a ip #
+command /unbanip [<offlineplayer>]:
+	aliases: /pardonip
+	permission: zypst.unbanip
+	permission message: &cYou don't have enough permission for this command!
+	trigger:
+		if arg 1 is not set:
+			send "&5Zypst >> &7You must specify a player."
+		if arg 1 is set:
+			ip-unban arg 1
+			broadcast "&5Zypst >> &7%arg 1% has been IP-unbanned."
+
+# reloads All The skripts!!! #
+command /skr:
+	description: Reloads all skripts.
+	usage: /skr
+	permission: zypst.admin
+	permission message: This command rquires rank Admin.
+	trigger:
+		make player execute command "/skript reload all"
+
+# Unbans Player's #
+command /unban [<offlineplayer>]:
+	aliases: /pardon
+	permission: zypst.unban
+	permission message: &cYou don't have enough permission for this command!
+	trigger:
+		if arg 1 is not set:
+			send "&5Zypst >> &7You must specify a player."
+		if arg 1 is set:
+			unban arg 1
+			broadcast "&5Zypst >> &7%arg 1% has been unbanned."
+
+
+# teleports a arg 2<-player who is getting telported! to arg 1<---player who used the command! #
+command /tpohere [<player>]:
+	permission: zypst.tpohere
+	permission message: &cYou don't have enough permission for this command!
+	trigger:
+		if arg 1 is not set:
+			send "&5Zypst >> &7You must specify a player to teleport to you."
+		if arg 1 is set:
+			set {back::%uuid of arg 1%} to location of arg 1
+			teleport arg 1 to the player
+			send "&5Zypst >> &7You have been teleported to %player%." to arg 1
+			send "&5Zypst >> &7%arg 1% has been teleported to you."
+
+# Teleports the player who used to command to arg 1<-- The player we teleport to ! #
+command /tpo [<player>] [<player>]:
+	permission: zypst.tpo
+	permission message: &cYou don't have enough permission for this command!
+	trigger:
+		if arg 1 is not set:
+			send "&5Zypst >> &7You must specify a player to teleport to."
+		if arg 1 is set:
+			if arg 2 is not set:
+				set {back::%uuid of arg 1%} to location of arg 1
+				teleport the player to arg 1
+				send "&5Zypst >> &7You have been teleported to %arg 1%."
+			if arg 2 is set:
+				set {back::%uuid of arg 1%} to location of arg 1
+				teleport arg 1 to arg 2
+				send "&5Zypst >> &7You have been teleported to %arg 2%." to arg 1
+
+# Tp's all the player on the server to the player who executed the command! #
+command /tpall [<player>]:
+	permission: zypst.tpall
+	permission message: &cYou don't have enough permission for this command!
+	trigger:
+		if arg 1 is not set:
+			loop all players:
+				teleport loop-player to the player
+			send "&5Zypst >> &7All players have been teleported to you."
+		if arg 1 is set:
+			loop all players:
+				teleport loop-player to arg 1
+			send "&5Zypst >> &7All players have been teleported to %arg 1%."
+
+# The tp command evey 1 likes to use :) ""(Thouht you mith want me to add it :) )"" #
+command /tp [<player>] [<player>]:
+	aliases: /tele, /tp2p, /teleport
+	permission: zypst.tp
+	permission message: &cYou don't have enough permission for this command!
+	trigger:
+		if arg 1 is not set:
+			send "&5Zypst >> &7You must specify a player to teleport to."
+		if arg 1 is set:
+			set {back::%uuid of player%} to location of player
+			teleport the player to arg 1
+			send "&5Zypst >> &7You have been teleported to %arg 1%."
+		if arg 2 is not set:
+			set {back::%uuid of arg 1%} to location of arg 1
+			teleport arg 1 to arg 2
+			send "&5Zypst >> &7You have been teleported to %arg 2%." to arg 1
+
+# Boardcast stuff out to the server :) #
+command /broadcast [<text>]:
+	permission: zypst.broadcast
+	permission message: &cYou don't have enough permission for this command!
+	aliases: /bcast, /alert, /announce, /a
+	trigger:
+		if arg 1 is not set:
+			send "&5Zypst >> &7You must specify a message to broadcast."
+		if arg 1 is set:
+			broadcast "&8(&cALERT&8) &7%arg 1%"
+			loop all players:
+				if loop-player has permission "zypst.social":
+					send "&8[&bSocial Spy&8] &7%player% &8: &c%arg 1%"
+				if {socialspy.%loop-player%} is 1:
+					send "&8[&bSocial Spy&8] &7%player% &8: &c%arg 1%"
+
+# the godmode part can toggle it for player's and or the user running the command! #
+command /god [<player>]:
+	permission: zypst.god
+	permission message: &cYou don't have enough permission for this command!
+	trigger:
+		if arg 1 is not set:
+			if {god::%uuid of player%} is not set:
+				set {god::%uuid of player%} to true
+				set the food level of player to 10
+				set the health of player to 20
+				send "&5Zypst >> &7Your God Mode has been enabled."
+			else if {god::%uuid of player%} is set:
+				delete {god::%uuid of player%}
+				send "&5Zypst >> &7Your God Mode has been disabled."
+		if arg 1 is set:
+			if player has permission "zypst.god.others":
+				if {god::%uuid of arg 1%} is not set:
+					set {god::%uuid of arg 1%} to true
+					set the food level of arg 1 to 10
+					set the health of arg 1 to 20
+					send "&5Zypst >> &7Your God Mode has been enabled." to arg 1
+					send "&5Zypst >> &7%arg 1%'s God Mode has been enabled."
+				else if {god::%uuid of arg 1%} is set:
+					clear {god::%uuid of arg 1%}
+					send "&5Zypst >> &7Your God Mode has been disabled." to arg 1
+					send "&5Zypst >> &7%arg 1%'s God Mode has been disabled."
+
+# Veiws player/player's balances #
+command /balance [<player>]:
+    permission: zypst.balance
+    permission message: &cYou don't have enough permission for this command!
+    aliases: /bal, /money
+    trigger:
+        if arg 1 is not set:
+            send "&5Zypst >> &7You have %{balance::%uuid of player%}%."
+        if arg 1 is set:
+            if player has permission "zypst.balance.others":
+                send "&5Zypst >> &7%arg 1% has %{balance::%uuid of arg 1%}%."
+
+# Kick's Players off the server :) #
+command /kick [<player>] [<text>]:
+	permission: zypst.kick
+	usage: /kick <player> [reason]
+	permission message: &cYou don't have enough permission for this command!
+	trigger:
+		if arg 1 is not set:
+			send "&5Zypst >> &7You must specify a player to kick."
+		if arg 1 is set:
+			if arg 2 is not set:
+				kick arg 1 due to "&fYou have broken the terms and service of Zypst Network"
+				broadcast "&5Zypst >> &7%arg 1% has been kicked for &fYou have broken the terms and service of Zypst Network"
+			if arg 2 is set:
+				kick arg 1 due to "%arg 2%"
+				broadcast "&5Zypst >> &7%arg 1% has been kicked for %arg 2%"
+
+# kick's all players off the server! ""(execpt the player that executed the command!)"" #
+command /kickall [<text>]:
+	permission: zypst.kickall
+	permission message: &cYou don't have enough permission for this command!
+	trigger:
+		if arg 1 is not set:
+			kick all players due to "&fYou have broken the terms and service of &5Zypst &fNetwork"
+		if arg 1 is set:
+			kick all players due to "%arg 1%"
+
+# Enable player/player's to fly around #
+command /fly:
+	permission: zypst.fly
+	permission message: &cYou don't have enough permission for this command!
+	trigger:
+		if player's flight mode is true:
+			set player's flight mode to false
+			send "&5Zypst >> &7Flight mode has been disabled!"
+		else:
+			set player's flight mode to true
+			send "&5Zypst >> &7Flight mode has been Enabled!"
