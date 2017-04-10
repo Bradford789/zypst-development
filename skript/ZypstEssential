@@ -290,3 +290,67 @@ command /plugins:
 	permission message: &cYou don't have enough permission for this command!
 	trigger:
 		Send "&c&lNo."
+
+# Ingores player's the victum choose's :) #
+command /ignore [<player>]:
+	permission: blockbrawl.ignore
+	permission message: &cYou don't have enough permission for this command!
+	trigger:
+		if arg 1 is not set:
+			send "&5Zypst >> &7You are ignoring: %{ignore::%uuid of player%::*}%"
+		if arg 1 is set:
+			if arg 1 is "%player%":
+				send "&5Zypst >> &7You cannot ignore yourself."
+			else:
+				if {ignore::%uuid of player%::*} contains arg 1:
+					clear {ignore::%uuid of player%::%arg 1%}
+					send "&5Zypst >> &7You are no longer ignoring %arg 1%."
+				else:
+					set {ignore::%uuid of player%::%arg 1%} to arg 1
+					send "&5Zypst >> &7You are now ignoring %arg 1%."
+
+# look at a player's inventory #
+command /invsee [<player>]:
+	permission: zypst.invsee
+	permission message: &cYou don't have enough permission for this command!
+	trigger:
+		if arg 1 is not set:
+			open the player's inventory for player
+		if arg 1 is set:
+			if player has permission "zypst.invsee.others":
+				open arg 1's inventory for player
+
+# give a specif player's head :) #
+command /skull [<offlineplayer>] [<player>]:
+	description: Receive the Skull of a Player
+	permission: zypst.skull
+	permission message: &cYou don't have enough permission for this command!
+	aliases: /playerskull, /head
+	trigger:
+		if arg 1 is not set:
+			give the player's skull to the player
+		if arg 1 is set:
+			if arg 2 is not set:
+				give arg 1's skull to the player
+			if arg 2 is set:
+				if player has permission "zypst.skull.others":
+					give arg 1's skull to arg 2
+
+# Sudo Command make a player use a command without the victum knowing it :) #
+command /sudo [<player>] [<text>]:
+	permission: zypst.sudo
+	permission message: &cYou don't have enough permission for this command!
+	trigger:
+		if arg 1 is not set:
+			send "&5Zypst >> &7You must specify a player to sudo."
+		if arg 1 is set:
+			if arg 2 is not set:
+				send "&5Zypst >> &7You must specify a command to sudo on %arg 1%."
+			if arg 2 is set:
+				make arg 1 execute command "%arg 2%"
+				send "&5Zypst >> &7%arg 1% &8:: &e%arg 2%"
+				loop all players:
+					if loop-player has permission "zypst.social":
+						send "&8[&bSocial Spy&8] &7%player% &esudoed &7%arg 1% &8: &c%arg 2%" to loop-player
+					if {socialspy::%uuid of loop-player%} is set:
+						send "&8[&bSocial Spy&8] &7%player% &esudoed &7%arg 1% &8: &c%arg 2%" to loop-player
