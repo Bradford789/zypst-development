@@ -1,6 +1,9 @@
 variables: # Shows all the variables in this code #
     {newplayer} = 0
     {logincount} = 0
+#   {muteall} Mutes all players! #
+#   {_chosenOne} a ramdom play to tp to! #
+#   {mod.%player%} The mod mode variables #
 
 on first Login: # when a player join's for the first time it add 1 to New player's #
     add 1 to {newplayer}
@@ -23,3 +26,134 @@ command /logincount: # the command that show the hq ""(Login count)"" #
         send "&5&lBest Daily Login Total >> &d%{bestcount}%" to player
         send "&d" to player
         send "&d&l___________________________" to player
+
+
+command /staff:
+    aliases: /h, /mod
+    permission: zypst.staff
+    permission message:  &cYou don't have access to that command!
+    trigger:
+        if {mod.%player%} is not set:
+            set gamemode of player to creative
+            clear player's inventory
+            hide the player from all players
+            send "&7Staff Mode Has Been: &cEnabled"
+            set slot 0 of player to book named "&cInventory Inspect"
+            set slot 5 of player to red carpet named "&cPunish Gui"
+            set slot 8 of player to chirp disc named "&cTeleport Random"
+            set {mod.%player%} to true
+        else:
+            send "&cStaff Mode disabled in 3 Seconds"
+            wait 1 second
+            send "&cStaff Mode disabled in 2 Seconds"
+            wait 1 second
+            send "&cStaff Mode disabled in 1 Seconds"
+            wait 1 second
+            set gamemode of player to survival
+            clear player's inventory
+            reveal player to all players
+            send "&7Staff Mode Has Been: &cDisabled"
+            delete {mod.%player%}
+            stop
+
+on right click:
+    if player is holding a music disc named "&cTeleport Random":
+        if player has permission "zypst.staff":
+            set {_chosenOne} to a random player out of all players
+            teleport player to {_chosenOne}
+            delete {_chosenOne}
+
+
+on click:
+    if player's tool is a red carpet:
+        if name of player's tool is "&cPunish Gui":
+            if player has permission "zypst.staff":
+                wait 1 second
+                execute player command "/Punish %clicked player%"
+                stop
+
+
+on click:
+    if player's tool is a book:
+        if name of player's tool is "&cInventory Inspect":
+            if player has permission "zypst.staff":
+                open the inventory of the clicked entity to the player
+                stop
+
+
+command /mutechat:
+    description: Mutes/unmutes the chat
+    permission: staff.rank
+    permission message: &cYou don't have access to that command!
+    executable by: players and console
+    trigger:
+        if {muteall} is not set:
+            set {muteall} to true
+            broadcast "&cChat was muted by %player%. "
+        else:
+            delete {muteall}
+            broadcast "&cChat was unmuted by %player%."
+
+command /clearchat:
+    permission: zypst.staff
+    permission message: &cYou don't have access to that command!
+    aliases: /cc,
+    trigger:
+        loop 200 times:
+            broadcast " "
+        broadcast "&7Chat was clear by &c%player%"
+
+
+on mine:
+    if {mod.%player%} is true:
+        cancel the event
+
+on pickup:
+    if {mod.%player%} is true:
+        cancel event
+
+on damage:
+    if {mod.%victim%} is true:
+        cancel event
+    if {mod.%attacker%} is true:
+        cancel event
+
+on break:
+    if {mod.%player%} is true:
+        cancel event
+
+on drop:
+    if {mod.%player%} is true:
+        cancel event
+
+
+
+on inventory click:
+    if {mod.%player%} is true:
+        cancel event
+        stop
+    else:
+        stop
+
+on quit:
+    if {mod.%player%} is true:
+        delete {mod.%player%}
+        set gamemode of player to survival
+        clear player's inventory
+        reveal player to all players
+
+
+command /sc [<text>]:
+    aliases: /staffchat
+    permission: zypst.staffchat
+    permission message: &cYou do not have permission to do that.
+    trigger:
+        loop all players:
+            loop-players has permission "staffchat.chat"
+            send "&8(&cStaffChat&8) &7%player%&8: &7%arg text%" to loop-player
+
+
+on join:
+    loop all players:
+        loop-players has permission "staffchat.chat"
+        send "&8(&cStaffChat&8) &c%player% joined the server" to loop-player
